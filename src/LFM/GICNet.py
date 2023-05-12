@@ -13,16 +13,8 @@ class FFLayer(tf.keras.layers.Layer):
       self.trainable = trainable
 
   def build(self, input_shape):  # Create the state of the layer (weights)
-    # f_init = tf.random_normal_initializer()
-    # self.f = tf.Variable(
-    #                     initial_value=f_init(shape=(input_shape[-1], int(self.units/2)),
-    #                                         dtype='float32'),
-    #                     trainable=True)
-    # self.f = tf.Variable( initial_value=self.freqDist.sample(sample_shape=(input_shape[-1], int(self.units/2))),
-    #                       trainable=True )
 
     self.f = tf.Variable( initial_value=tf.reshape( self.freqs, [input_shape[-1], -1] ), trainable=self.trainable )
-    # self.f = tf.Variable( initial_value=tf.reshape( self.freqs, [input_shape[-1], int(self.units/2)] ), trainable=True )
 
   def call(self, inputs):  # Defines the computation from inputs to outputs
       return tf.concat([tf.sin( 2. * self.pi * tf.matmul(inputs, self.f)), tf.cos( 2. * self.pi * tf.matmul(inputs, self.f))], -1)
@@ -41,9 +33,6 @@ class KIPLayer(tf.keras.layers.Layer):
         return self.k(X,Y).mat
     
     def call(self, X_in, y_in, X_out):
-
-        # X_in = tf.reshape(X_in, [-1,X_out.shape[1]])
-        # y_in = tf.reshape(y_in, [-1,X_out.shape[1]])
 
         # get kernel mat between X_out and X_in:
         K = self.kernel_mat(X_out, X_in)
@@ -75,19 +64,14 @@ class GICNet( tf.keras.Model ):
 
             x_input_y = layer( x_input_y )
 
-        # x_input = tf.concat([x_input[:, :-self.dim_trunc_in_y], tf.transpose(x_input_y, [0,1]) ], 1) -0
-
         x_input_x = x_input[:, :-self.dim_branch_in_y]
 
         # kernel interp layer
-        # numX           = x_input.shape[1] - self.dim_trunc_P -0
-        # x_input_concat = tf.zeros(shape=[self.grid_kipr.shape[0], 1]) -0
         x_input_concat = self.grid_kipr
 
         i = 0
         for layer in self.kipLayers:
             #split out x_input, y_input (coded for scalar field)
-            # kipReturn      = layer(x_input[:, :-self.dim_trunc_P], x_input[:, numX+i:numX+i+1], self.grid_kipr) -0
             kipReturn      = layer(x_input_x, x_input_y[:, i:i+1], self.grid_kipr)
 
             x_input_concat = tf.concat([x_input_concat, kipReturn],1)

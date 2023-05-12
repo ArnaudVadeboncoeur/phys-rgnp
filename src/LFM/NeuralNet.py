@@ -44,9 +44,7 @@ class NeuralN(tf.keras.Model):
 
         
     def Map(self, varIn):
-        
-        #tf.debugging.assert_equal( len(varIn), self.layout.shape[0], message='Input wrong size for {}'.format(self.NN_name))
-        
+                
         varIn  = self.transf_forward(varIn)
         allVar = tf.constant(0., shape=[varIn[0].shape[0],1],dtype=floatf)
         for var in varIn:
@@ -59,7 +57,6 @@ class NeuralN(tf.keras.Model):
         
         tf.debugging.assert_all_finite(mean, 'mean not finite')
         tf.debugging.assert_all_finite(logvar, 'logvar not finite')
-        #logvar = self.upBoundw_log( logvar )
         logvar = self.dBoundwalpha_log( logvar )
         mean   = tf.cast(mean, floatf)
         logvar = tf.cast(logvar, floatf)
