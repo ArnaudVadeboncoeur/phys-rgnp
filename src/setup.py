@@ -3,8 +3,8 @@
 from setuptools import setup
 
 setup(
-      name='LFM',
+      name='RGNP',
       version='0.1.0',
       # list folders, not files
-      packages=['LFM']
+      packages=['RGNP']
       )

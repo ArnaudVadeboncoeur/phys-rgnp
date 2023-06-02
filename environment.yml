@@ -1,4 +1,4 @@
-name: lfm
+name: rgnp
 channels:
   - conda-forge
   - defaults
@@ -238,4 +238,4 @@ dependencies:
       - widgetsnbextension==4.0.3
       - wrapt==1.14.1
       - xarray==2022.11.0
-prefix: /home/av537@ad.eng.cam.ac.uk/miniconda3/envs/lfm
+prefix: /home/av537@ad.eng.cam.ac.uk/miniconda3/envs/rgnp
